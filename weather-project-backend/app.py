@@ -602,6 +602,13 @@ def normalize_coordinates(latitude: float, longitude: float) -> tuple[float, flo
     return round(latitude, 4), round(longitude, 4)
 
 
+def nearest_supported_city(latitude: float, longitude: float) -> CityCatalogItem:
+    return min(
+        SUPPORTED_CITIES,
+        key=lambda city: (city["latitude"] - latitude) ** 2 + (city["longitude"] - longitude) ** 2,
+    )
+
+
 def build_forecast(city: CityCatalogItem, payload: dict) -> WeatherResponse:
     current = payload.get("current", {})
     daily = payload.get("daily", {})
@@ -695,9 +702,14 @@ def fetch_weather_for_coordinates(latitude: float, longitude: float) -> WeatherR
     try:
         city_name, country_name = reverse_geocode(normalized_latitude, normalized_longitude)
     except HTTPException:
-        # Reverse geocoding provider may be unavailable/rate-limited in cloud;
-        # return forecast anyway so coordinate-based flow does not break.
         city_name, country_name = "Точка на карте", "Неизвестная страна"
+
+    if city_name == "Точка на карте" or country_name == "Неизвестная страна":
+        fallback_city = nearest_supported_city(normalized_latitude, normalized_longitude)
+        if city_name == "Точка на карте":
+            city_name = fallback_city["name"]
+        if country_name == "Неизвестная страна":
+            country_name = fallback_city["country"]
 
     location = {
         "name": city_name,
