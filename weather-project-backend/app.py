@@ -97,6 +97,10 @@ REVERSE_GEOCODING_URL = os.getenv(
 OPEN_METEO_REVERSE_GEOCODING_URL = os.getenv(
     "OPEN_METEO_REVERSE_GEOCODING_URL", "https://geocoding-api.open-meteo.com/v1/reverse"
 )
+BIG_DATA_CLOUD_REVERSE_GEOCODING_URL = os.getenv(
+    "BIG_DATA_CLOUD_REVERSE_GEOCODING_URL",
+    "https://api.bigdatacloud.net/data/reverse-geocode-client",
+)
 REQUEST_TIMEOUT_SECONDS = float(os.getenv("OPEN_METEO_TIMEOUT", "10"))
 CACHE_TTL_SECONDS = int(os.getenv("WEATHER_CACHE_TTL", "300"))
 PUSH_CHECK_INTERVAL_SECONDS = int(os.getenv("PUSH_CHECK_INTERVAL_SECONDS", "600"))
@@ -582,14 +586,42 @@ def reverse_geocode(latitude: float, longitude: float) -> tuple[str, str]:
         country_name = address.get("country") or "Неизвестная страна"
         return str(city_name), str(country_name)
 
-    try:
-        city_name, country_name = _from_open_meteo()
-        if not _is_generic(city_name, country_name):
-            return city_name, country_name
-    except HTTPException:
-        pass
+    def _from_big_data_cloud() -> tuple[str, str]:
+        payload = fetch_json(
+            BIG_DATA_CLOUD_REVERSE_GEOCODING_URL,
+            {
+                "latitude": latitude,
+                "longitude": longitude,
+                "localityLanguage": "ru",
+            },
+            cache_key=f"reverse:bigdatacloud:{latitude:.4f}:{longitude:.4f}",
+        )
+        city_name = (
+            payload.get("city")
+            or payload.get("locality")
+            or payload.get("principalSubdivision")
+            or payload.get("localityInfo", {})
+            .get("administrative", [{}])[0]
+            .get("name")
+            or "Точка на карте"
+        )
+        country_name = payload.get("countryName") or "Неизвестная страна"
+        return str(city_name), str(country_name)
 
-    return _from_nominatim()
+    providers = (_from_open_meteo, _from_nominatim, _from_big_data_cloud)
+    last_city_name = "Точка на карте"
+    last_country_name = "Неизвестная страна"
+
+    for provider in providers:
+        try:
+            city_name, country_name = provider()
+            last_city_name, last_country_name = city_name, country_name
+            if not _is_generic(city_name, country_name):
+                return city_name, country_name
+        except HTTPException:
+            continue
+
+    return last_city_name, last_country_name
 
 
 def normalize_coordinates(latitude: float, longitude: float) -> tuple[float, float]:
