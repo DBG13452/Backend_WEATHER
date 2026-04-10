@@ -651,7 +651,12 @@ def fetch_weather_for_city(city: CityCatalogItem) -> WeatherResponse:
 def fetch_weather_for_coordinates(latitude: float, longitude: float) -> WeatherResponse:
     normalized_latitude, normalized_longitude = normalize_coordinates(latitude, longitude)
     payload = fetch_weather_payload(normalized_latitude, normalized_longitude)
-    city_name, country_name = reverse_geocode(normalized_latitude, normalized_longitude)
+    try:
+        city_name, country_name = reverse_geocode(normalized_latitude, normalized_longitude)
+    except HTTPException:
+        # Reverse geocoding provider may be unavailable/rate-limited in cloud;
+        # return forecast anyway so coordinate-based flow does not break.
+        city_name, country_name = "Точка на карте", "Неизвестная страна"
 
     location = {
         "name": city_name,
