@@ -531,6 +531,30 @@ def reverse_geocode(latitude: float, longitude: float) -> tuple[str, str]:
     def _is_generic(city_name: str, country_name: str) -> bool:
         return city_name == "Точка на карте" or country_name == "Неизвестная страна"
 
+    def _from_open_meteo() -> tuple[str, str]:
+        payload = fetch_json(
+            OPEN_METEO_REVERSE_GEOCODING_URL,
+            {
+                "latitude": latitude,
+                "longitude": longitude,
+                "language": "ru",
+                "count": 1,
+                "format": "json",
+            },
+            cache_key=f"reverse:openmeteo:{latitude:.4f}:{longitude:.4f}",
+        )
+        results = payload.get("results") or []
+        first_result = results[0] if results else {}
+        city_name = (
+            first_result.get("name")
+            or first_result.get("admin2")
+            or first_result.get("admin1")
+            or first_result.get("locality")
+            or "Точка на карте"
+        )
+        country_name = first_result.get("country") or "Неизвестная страна"
+        return str(city_name), str(country_name)
+
     def _from_nominatim() -> tuple[str, str]:
         payload = fetch_json(
             REVERSE_GEOCODING_URL,
@@ -558,37 +582,14 @@ def reverse_geocode(latitude: float, longitude: float) -> tuple[str, str]:
         country_name = address.get("country") or "Неизвестная страна"
         return str(city_name), str(country_name)
 
-    def _from_open_meteo() -> tuple[str, str]:
-        payload = fetch_json(
-            OPEN_METEO_REVERSE_GEOCODING_URL,
-            {
-                "latitude": latitude,
-                "longitude": longitude,
-                "language": "ru",
-                "count": 1,
-                "format": "json",
-            },
-            cache_key=f"reverse:openmeteo:{latitude:.4f}:{longitude:.4f}",
-        )
-        results = payload.get("results") or []
-        first_result = results[0] if results else {}
-        city_name = (
-            first_result.get("name")
-            or first_result.get("admin2")
-            or first_result.get("admin1")
-            or "Точка на карте"
-        )
-        country_name = first_result.get("country") or "Неизвестная страна"
-        return str(city_name), str(country_name)
-
     try:
-        city_name, country_name = _from_nominatim()
+        city_name, country_name = _from_open_meteo()
         if not _is_generic(city_name, country_name):
             return city_name, country_name
     except HTTPException:
         pass
 
-    return _from_open_meteo()
+    return _from_nominatim()
 
 
 def normalize_coordinates(latitude: float, longitude: float) -> tuple[float, float]:
