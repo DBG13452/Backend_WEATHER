@@ -602,11 +602,8 @@ def normalize_coordinates(latitude: float, longitude: float) -> tuple[float, flo
     return round(latitude, 4), round(longitude, 4)
 
 
-def nearest_supported_city(latitude: float, longitude: float) -> CityCatalogItem:
-    return min(
-        SUPPORTED_CITIES,
-        key=lambda city: (city["latitude"] - latitude) ** 2 + (city["longitude"] - longitude) ** 2,
-    )
+def build_coordinate_fallback_location(latitude: float, longitude: float) -> tuple[str, str]:
+    return (f"Точка {latitude:.4f}, {longitude:.4f}", "По координатам")
 
 
 def build_forecast(city: CityCatalogItem, payload: dict) -> WeatherResponse:
@@ -702,14 +699,14 @@ def fetch_weather_for_coordinates(latitude: float, longitude: float) -> WeatherR
     try:
         city_name, country_name = reverse_geocode(normalized_latitude, normalized_longitude)
     except HTTPException:
-        city_name, country_name = "Точка на карте", "Неизвестная страна"
+        city_name, country_name = build_coordinate_fallback_location(
+            normalized_latitude, normalized_longitude
+        )
 
     if city_name == "Точка на карте" or country_name == "Неизвестная страна":
-        fallback_city = nearest_supported_city(normalized_latitude, normalized_longitude)
-        if city_name == "Точка на карте":
-            city_name = fallback_city["name"]
-        if country_name == "Неизвестная страна":
-            country_name = fallback_city["country"]
+        city_name, country_name = build_coordinate_fallback_location(
+            normalized_latitude, normalized_longitude
+        )
 
     location = {
         "name": city_name,
