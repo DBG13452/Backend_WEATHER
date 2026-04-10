@@ -1,0 +1,67 @@
+{
+  "subscriptions": {
+    "https://fcm.googleapis.com/fcm/send/cLxugTR0Rxk:APA91bHTurzLVqnmmAkB4_etQM-Hlm2Ll61nszgzKkDPzbZaXtN6-8e6tW0K2Ia-tGGH3j6TyWosUurNttwaeQA1zPkCRMiRlQemJATi6tu0mkdV9WbCrV8PgWa6x7y_XyYE0jiTzICX": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/cLxugTR0Rxk:APA91bHTurzLVqnmmAkB4_etQM-Hlm2Ll61nszgzKkDPzbZaXtN6-8e6tW0K2Ia-tGGH3j6TyWosUurNttwaeQA1zPkCRMiRlQemJATi6tu0mkdV9WbCrV8PgWa6x7y_XyYE0jiTzICX",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BJNJqsniQKvS8gGG4B8wP8p3HKpBtsO8MoQtIo5f1tdiCuuvMo3SbYZhGCE7oqU0hFWrd7Wr3rYo04rZXUEyzeI",
+        "auth": "it4XNzVmDXxBDPC92rHAwQ"
+      }
+    },
+    "https://fcm.googleapis.com/fcm/send/ct9AyCP78Dk:APA91bFL-XemQYhfqxMRLG1mToxvCsDK0sbZ9oYQF6ueA4wvCOThrK6miVuIvbnLOoVXqpWNN7TnrHkenp5Wtd2YavWoVcSffmuBLph3LMsObNBQ5vpT1chl7t8k9DWOp7CTbjsoiOBZ": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/ct9AyCP78Dk:APA91bFL-XemQYhfqxMRLG1mToxvCsDK0sbZ9oYQF6ueA4wvCOThrK6miVuIvbnLOoVXqpWNN7TnrHkenp5Wtd2YavWoVcSffmuBLph3LMsObNBQ5vpT1chl7t8k9DWOp7CTbjsoiOBZ",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BAjL8kxJ4fP4EcIV7fMuDIiMFUBJk_LFOvU1uaNDw43Kisuwn1LbIknRkVPOGCXzRkLp8_am00B8uGdqzdrC6o8",
+        "auth": "xP0dw2zRxqdcV3HopEfIiQ"
+      }
+    },
+    "https://fcm.googleapis.com/fcm/send/etVS0ZxM-_k:APA91bFoxwU8XiKylX1hceH-uhITAkjljICh6csoWLvuc-0qeUmXUloVPq8JwK4C02qwtUci4vR_sRs3gpkhc3CTvQSdw8UYUTGvdAIsK1xxEu7M7cHmNqn3knmtbgqmolFsCpdxoWFl": {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/etVS0ZxM-_k:APA91bFoxwU8XiKylX1hceH-uhITAkjljICh6csoWLvuc-0qeUmXUloVPq8JwK4C02qwtUci4vR_sRs3gpkhc3CTvQSdw8UYUTGvdAIsK1xxEu7M7cHmNqn3knmtbgqmolFsCpdxoWFl",
+      "expirationTime": null,
+      "keys": {
+        "p256dh": "BBpeGMbdXqALkaNiyMlZud78k9pfJG8JZZbusDucK28kvQBJ-YOmQ972vJs1xlYIDmQizLlXSk22N-lLL7GJSuc",
+        "auth": "edzKhpgsygruRCjfvlRcDg"
+      }
+    }
+  },
+  "alerts": [
+    {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/cLxugTR0Rxk:APA91bHTurzLVqnmmAkB4_etQM-Hlm2Ll61nszgzKkDPzbZaXtN6-8e6tW0K2Ia-tGGH3j6TyWosUurNttwaeQA1zPkCRMiRlQemJATi6tu0mkdV9WbCrV8PgWa6x7y_XyYE0jiTzICX",
+      "alert_id": "55.7522_37.6156",
+      "label": "Москва",
+      "country": "Россия",
+      "latitude": 55.7522,
+      "longitude": 37.6156,
+      "last_notified_on": "2026-04-10",
+      "send_not_before_ts": null
+    },
+    {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/ct9AyCP78Dk:APA91bFL-XemQYhfqxMRLG1mToxvCsDK0sbZ9oYQF6ueA4wvCOThrK6miVuIvbnLOoVXqpWNN7TnrHkenp5Wtd2YavWoVcSffmuBLph3LMsObNBQ5vpT1chl7t8k9DWOp7CTbjsoiOBZ",
+      "alert_id": "55.7522_37.6156",
+      "label": "Москва",
+      "country": "Россия",
+      "latitude": 55.7522,
+      "longitude": 37.6156,
+      "last_notified_on": "2026-04-10",
+      "send_not_before_ts": null
+    },
+    {
+      "endpoint": "https://fcm.googleapis.com/fcm/send/etVS0ZxM-_k:APA91bFoxwU8XiKylX1hceH-uhITAkjljICh6csoWLvuc-0qeUmXUloVPq8JwK4C02qwtUci4vR_sRs3gpkhc3CTvQSdw8UYUTGvdAIsK1xxEu7M7cHmNqn3knmtbgqmolFsCpdxoWFl",
+      "alert_id": "53.3474_83.7784",
+      "label": "Барнаул",
+      "country": "Россия",
+      "latitude": 53.3474,
+      "longitude": 83.7784,
+      "last_notified_on": "2026-04-10",
+      "preferences": {
+        "precipitation": true,
+        "humidity": false,
+        "wind": true,
+        "pressure": false,
+        "visibility": false
+      },
+      "send_not_before_ts": null
+    }
+  ]
+}
